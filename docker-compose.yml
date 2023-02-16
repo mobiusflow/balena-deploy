@@ -1,0 +1,38 @@
+version: "2"
+volumes:
+  resin-data:
+  mobius-licence:
+
+services:
+  mobius:
+    build: ./dist/mobius
+    privileged: true
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      - 502:502
+      - 8443:8443
+      - 1883:1883
+      - 4840:4840
+      - 8883:8883
+      - 10502:10502
+      - 10001:10001
+      - 30815:30815
+      - 30883:30883
+    volumes:
+      - resin-data:/data
+      - mobius-licence:/.licence
+    labels:
+      io.resin.features.supervisor-api: "1"
+
+  manage:
+    build: ./dist/management
+    privileged: true
+    network_mode: host
+    restart: always
+    volumes:
+      - resin-data:/data
+    labels:
+      io.resin.features.dbus: "1"
+      io.resin.features.supervisor-api: "1"
